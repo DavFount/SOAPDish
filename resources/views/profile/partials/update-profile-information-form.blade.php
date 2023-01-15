@@ -36,7 +36,7 @@
                         {{ __('Your email address is unverified.') }}
 
                         <button form="send-verification"
-                                class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">
+                                class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 dark:focus:ring-offset-gray-800">
                             {{ __('Click here to re-send the verification email.') }}
                         </button>
                     </p>
@@ -55,13 +55,38 @@
             <div class="inline-flex">
                 @if(auth()->user()->avatar_url)
                     <div class="mr-3">
-                        <img src="{{ asset('storage/' . auth()->user()->avatar_url) }}" class="h-16 w-16 border border-gray-900 rounded-xl"/>
+                        <img src="{{ asset('storage/' . auth()->user()->avatar_url) }}"
+                             class="h-16 w-16 border border-gray-900 rounded-xl"/>
                     </div>
                 @endif
-                <div class="mt-1">
+                <div class="mt-1" x-data="{show: false}">
                     <input type="file" id="avatar" name="avatar_url" onChange="onFileUploadChange()"
-                           class="hidden border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
-                    <button type="button" class="bg-gray-900 rounded-xl text-gray-50 text-sm p-2" onclick="document.getElementById('avatar').click()">Upload a file</button>
+                           class="hidden border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-gray-500 dark:focus:border-gray-600 focus:ring-gray-500 dark:focus:ring-gray-600 rounded-md shadow-sm">
+                    <button type="button" class="bg-gray-900 hover:bg-gray-700 rounded-xl text-gray-50 border border-gray-900 text-sm p-2 custom-shadow"
+                            onclick="document.getElementById('avatar').click()">Upload a file
+                    </button>
+                    @if(auth()->user()->avatar_url)
+                        <button type="button" class="bg-red-900 hover:bg-red-700 rounded-xl text-gray-50 border border-gray-900 text-sm p-2 ml-3 custom-shadow"
+                                @click="show = true">Delete Avatar
+                        </button>
+
+                        <div x-show="show">
+                            <x-confirm-modal title="Delete Avatar" icon="exclamation-triangle">
+                                Are you sure you want to remove your avatar?
+                                <x-slot:cta>
+                                    <button type="button"
+                                            @click="document.querySelector('#deleteAvatar').submit()"
+                                            class="inline-flex w-full justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm">
+                                        Delete
+                                    </button>
+                                    <button @click.prevent="show = false" type="button"
+                                            class="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                                        Cancel
+                                    </button>
+                                </x-slot:cta>
+                            </x-confirm-modal>
+                        </div>
+                    @endif
                     <span class="text-xs text-gray-900 dark:text-gray-50 flex mt-1" id="image-upload"></span>
                     <script>
                         onFileUploadChange = () => {
@@ -89,5 +114,10 @@
                 >{{ __('Saved.') }}</p>
             @endif
         </div>
+    </form>
+    <form action="{{route('profile.update')}}" id="deleteAvatar" method="POST">
+        @csrf
+        @method('PATCH')
+        <input type="hidden" name="remove-avatar" value="1">
     </form>
 </section>

@@ -27,6 +27,21 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
+        if($request['remove-avatar']) {
+            $request->user()->avatar_url = null;
+            $request->user()->save();
+        }
+
+        if($request['language']) {
+            $request->user()->language = $request['language'];
+            $request->user()->save();
+        }
+
+        if($request['bible']) {
+            $request->user()->bible_id = $request['bible'];
+            $request->user()->save();
+        }
+
         $attributes = $request->validate([
             'name' => ['required'],
             'email' => ['required', Rule::unique('users', 'email')->ignore($request->user())],
