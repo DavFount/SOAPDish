@@ -10,14 +10,11 @@ class BibleDropdown extends Component
 {
     public function render(): View
     {
-        $bibles = Http::withHeaders([
-            'api-key' => config('bibleapi.api_key')
-        ])->get(config('bibleapi.base_url'), [
-            'language' => auth()->user()->language
-        ]);
+        $baseUrl = config('bibleapi.base_url');
+        $bibles = Http::get("{$baseUrl}/translations");
 
         return view('components.bible-dropdown', [
-            'bibles' => $bibles->json()['data']
+            'bibles' => $bibles->json()
         ]);
     }
 }

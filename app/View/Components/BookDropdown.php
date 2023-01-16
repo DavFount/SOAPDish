@@ -11,15 +11,12 @@ class BookDropdown extends Component
     public function render(): View
     {
         $base_url = config('bibleapi.base_url');
-        $bible_id = auth()->user()->bible_id;
-
-        $books = Http::withHeaders([
-            'api-key' => config('bibleapi.api_key')
-        ])->get("{$base_url}/{$bible_id}/books");
-
+        $books = Http::get("{$base_url}/books");
 
         return view('components.book-dropdown', [
-            'books' => $books->json()['data']
+            'books' => $books->json()
         ]);
     }
 }
+
+// https://bible-go-api.rkeplin.com/v1/books

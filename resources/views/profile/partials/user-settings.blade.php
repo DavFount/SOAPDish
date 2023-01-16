@@ -32,11 +32,11 @@
     </header>
 
     <div>
-        <form id="languageForm" action="{{ route('profile.update') }}" method="POST">
-            @csrf
-            @method('PATCH')
-            <x-language-dropdown onchange="this.form.submit()" />
-        </form>
+{{--        <form id="languageForm" action="{{ route('profile.update') }}" method="POST">--}}
+{{--            @csrf--}}
+{{--            @method('PATCH')--}}
+{{--            <x-language-dropdown onchange="this.form.submit()" />--}}
+{{--        </form>--}}
 
         <form id="bibleSelector" action="{{ route('profile.update') }}" method="POST" class="mt-3">
             @csrf
