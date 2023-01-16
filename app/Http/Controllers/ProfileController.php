@@ -27,40 +27,32 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        if($request['remove-avatar']) {
+        if ($request['remove-avatar']) {
             $request->user()->avatar_url = null;
-            $request->user()->save();
-        }
 
-        if($request['language']) {
+        } else if ($request['language']) {
             $request->user()->language = $request['language'];
-            $request->user()->save();
-        }
-
-        if($request['bible']) {
+        } else if ($request['bible']) {
             $request->user()->bible_id = $request['bible'];
-            $request->user()->save();
-        }
+        } else {
+            $attributes = $request->validate([
+                'name' => ['required'],
+                'email' => ['required', Rule::unique('users', 'email')->ignore($request->user())],
+                'avatar_url' => ['image']
+            ]);
 
-        $attributes = $request->validate([
-            'name' => ['required'],
-            'email' => ['required', Rule::unique('users', 'email')->ignore($request->user())],
-            'avatar_url' => ['image']
-        ]);
+            $request->user()->fill($attributes);
 
-        $request->user()->fill($attributes);
+            if ($request->user()->isDirty('email')) {
+                $request->user()->email_verified_at = null;
+            }
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
-        }
-
-        if($request->avatar_url ?? null)
-        {
-            $request->user()->avatar_url = request()->file('avatar_url')->store('avatar');
+            if ($request->avatar_url ?? null) {
+                $request->user()->avatar_url = request()->file('avatar_url')->store('avatar');
+            }
         }
 
         $request->user()->save();
-
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 

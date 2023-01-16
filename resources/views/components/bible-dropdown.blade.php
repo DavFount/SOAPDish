@@ -1,5 +1,5 @@
 <div>
-    <x-input-label for="language">Bible</x-input-label>
+    <x-input-label for="bible">Bible</x-input-label>
     @if (count($bibles) > 1)
     <select id="bible" name="bible"
             {{ $attributes->merge(['class' => 'bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-200 mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-gray-500 focus:outline-none focus:ring-gray-500 sm:text-sm']) }}>
