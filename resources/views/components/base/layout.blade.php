@@ -17,12 +17,11 @@
         }
     </script>
 </head>
-<body class="font-sans antialiased">
-<div class="min-h-screen bg-gray-50 dark:bg-gray-900">
+<body class="font-sans antialiased bg-gray-50 dark:bg-gray-900">
+<div class="min-h-screen">
     <header>
-        <x-base.navbar />
+        <x-base.navbar/>
     </header>
-
     <main>
         @if (isset($header))
             <header class="bg-white dark:bg-gray-800 shadow">
@@ -31,6 +30,7 @@
                 </div>
             </header>
         @endif
+        <x-flash-message :timeout="4000"/>
         {{ $slot }}
     </main>
 
@@ -38,5 +38,6 @@
 
     </footer>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.2/flowbite.min.js"></script>
 </body>
 </html>

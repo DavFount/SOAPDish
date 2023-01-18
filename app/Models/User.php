@@ -24,6 +24,8 @@ class User extends Authenticatable
         'email',
         'password',
         'thumbnail',
+        'title',
+        'bio'
     ];
 
     /**
@@ -46,6 +48,14 @@ class User extends Authenticatable
     ];
 
     public function studies() {
-        return $this.$this->hasMany(Study::class);
+        return $this->hasMany(Study::class);
+    }
+
+    public function following() {
+        return $this->belongsToMany(User::class, 'followers', 'follower_id', 'following_id');
+    }
+
+    public function followers() {
+        return $this->belongsToMany(User::class, 'followers', 'following_id', 'follower_id');
     }
 }

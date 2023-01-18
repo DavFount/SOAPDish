@@ -25,6 +25,20 @@
         </div>
 
         <div>
+            <x-input-label for="title" :value="__('Title')"/>
+            <x-text-input id="title" name="title" type="text" class="mt-1 block w-full" :value="old('title', $user->title)"
+                          required autocomplete="title"/>
+            <x-input-error class="mt-2" :messages="$errors->get('title')"/>
+        </div>
+
+        <div>
+            <x-input-label for="bio" :value="__('Bio')"/>
+            <x-text-input id="bio" name="bio" type="text" class="mt-1 block w-full" :value="old('bio', $user->bio)"
+                          required autocomplete="title"/>
+            <x-input-error class="mt-2" :messages="$errors->get('bio')"/>
+        </div>
+
+        <div>
             <x-input-label for="email" :value="__('Email')"/>
             <x-text-input id="email" name="email" type="email" class="mt-1 block w-full"
                           :value="old('email', $user->email)" required autocomplete="email"/>
